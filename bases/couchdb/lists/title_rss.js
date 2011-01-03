@@ -1,5 +1,5 @@
 function(head, req) {
-    // !json templates.articles_rss
+    // !json templates.titles_rss
     // !code _attachments/js/collections_list.js
 
     var Mustache = require('vendor/couchapp/lib/mustache');
@@ -19,6 +19,6 @@ function(head, req) {
 
 
     registers = {"rows" : post };
-    return Mustache.to_html(templates.articles_rss,registers);
+    return Mustache.to_html(templates.titles_rss,registers);
 
 }
