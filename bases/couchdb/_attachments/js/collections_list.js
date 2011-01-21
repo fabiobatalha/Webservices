@@ -33,5 +33,14 @@ collections_list = {"scl": {"acron":"scl",
                     "mex": {"acron":"mex",
                             "domain":"www.scielo.org.mx",
                             "name":{"pt":"Mexico","es":"Mexico","en":"Mexico"}
+                            },
+                    "sss": {"acron":"sss",
+                            "domain":"www.scielo.org.mx",
+                            "name":{"pt":"Social Sciences","es":"Social Sciences","en":"Social Sciences"}
+                            },
+                    "spa": {"acron":"spa",
+                            "domain":"www.scielosp.org",
+                            "name":{"pt":"Saúde Pública","es":"Salud Publica","en":"Public Health"}
                             }
+
 }

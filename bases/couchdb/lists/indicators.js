@@ -20,6 +20,12 @@ function(head, req) {
         }
     });
 
+    function custLog(x,base) {
+	// Created 1997 by Brian Risk.  http://brianrisk.com
+	return (Math.log(x))/(Math.log(base));
+    }
+
+
     Array.prototype.getUniqueValues = function () {
         var hash = new Object();
         for (j = 0; j < this.length; j++) {hash[this[j]] = true}
@@ -29,91 +35,35 @@ function(head, req) {
    }
 
     while (row = getRow()) {
-      collections.push(row.key[0]);
+      if (collections_list[row.key[0]]){
+          collections.push(collections_list[row.key[0]]['name']['en']);
+      }else{
+          collections.push(row.key[0]);
+      }
       types.push(row.key[1]);
       post.push(row.value);
 
       if (row.key[1] == "i"){
-         series.i.push(Math.log(row.value,10));
+         series.i.push(custLog(row.value,10));
       }else if (row.key[1] == "h"){
-         series.h.push(Math.log(row.value,10));
+         series.h.push(custLog(row.value,10));
       }else if (row.key[1] == "t"){
-         series.t.push(Math.log(row.value,10));
+         series.t.push(custLog(row.value,10));
       }
 
     }
 
-    var options = {
-      chart: {
-         renderTo: 'container',
-         defaultSeriesType: 'column'
-      },
-      title: {
-         text: 'SciELO Network Indicators'
-      },
-      subtitle: {
-         text: 'Source: www.scielo.org'
-      },
-      xAxis: {
-         categories: collections.getUniqueValues()
-         //categories: ['scl','esp','arg']
-      },
-      yAxis: {
-        min:0,
-/*
-        labels: {
-            formatter: function() {
-                return Math.pow(10,this.value);
-            },
-*/
-         title: {
-            text: 'Totals'
-         }
-      },
-      legend: {
-         layout: 'vertical',
-         backgroundColor: '#FFFFFF',
-         align: 'left',
-         verticalAlign: 'top',
-         x: 100,
-         y: 70,
-         floating: true,
-         shadow: true
-      },
+    var chart_params =  {
+        categories: collections.getUniqueValues(),
+        series: []
+    }
 
-     tooltip: {
-         formatter: function() {
-            return ''+this.x +': '+ this.y +' mm';
-         }
-      },
+   chart_params.series.push({name: "issues", data: series.i });
+   chart_params.series.push({name: "articles", data: series.h });
+   chart_params.series.push({name: "titles", data: series.t });
 
 
-/*
-      tooltip: {
-          formatter: function() {
-              return '<b> ulele'+ this.y +
-                  '</b> = log(<b>'+ Math.round(Math.pow(10,this.y)) +'</b>,10)';
-          }
-      },
-*/
-
-      plotOptions: {
-         column: {
-            pointPadding: 0.2,
-            borderWidth: 0
-         }
-      },
-      series: []
-   }
-
-
-
-   options.series.push({name: "issues", data: series.i });
-   options.series.push({name: "articles", data: series.h });
-   options.series.push({name: "title", data: series.t });
-
-
-    var myJSONText = JSON.stringify(options);
+    var myJSONText = JSON.stringify(chart_params);
 
     registers = {"rows" : myJSONText };
     return Mustache.to_html(templates.indicators,registers);
