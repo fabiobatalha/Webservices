@@ -12,7 +12,7 @@
         {{#rows}}
             <item>
                 <title>{{title}}</title>
-                <link>http://{{#collection_info}}{{domain}}{{/collection_info}}/scielo.php?script=sci_serial&amp;pid={{issn}}&amp;lng=en&amp;nrm=iso&amp;tlng=pt</link>
+                <link>{{title_url}}</link>
                 <pubDate>{{insert_date}}</pubDate>
             </item>
         {{/rows}}
