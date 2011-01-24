@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
     <channel>
-        <title>SciELO ORG RSS.</title>
+        <!--title>SciELO ORG RSS.</title>
         <description>SciELO ORG Articles RSS</description>
         <link>http://www.scielo.org/</link>
         <image>
             <url>http://www.scielo.br/img/scielobre.gif</url>
             <title>SciELO</title>
             <link>http://www.scielo.org</link>
-        </image>
+        </image-->
         {{#rows}}
             <item>
-                <title>{{#article_title}}{{_}}{{/article_title}}</title>
-                <description>{{#abstract}}{{a}}{{/abstract}}</description>
-                <link>http://{{#collection_info}}{{domain}}{{/collection_info}}/scielo.php?script=sci_arttext&amp;pid={{pid}}&amp;lng=en&amp;nrm=iso&amp;tlng=pt</link>
+                <title>{{article_req}}</title>
+                <description>{{abstract_req}}</description>
+                <link>{{article_url}}</link>
                 <pubDate>{{#pubdate}}{{_}}{{/pubdate}}</pubDate>
             </item>
         {{/rows}}
+
     </channel>
+
 </rss>
