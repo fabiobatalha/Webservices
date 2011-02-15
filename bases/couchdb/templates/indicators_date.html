@@ -12,44 +12,61 @@
     <script language="javascript">
 function dograph(){
     var chart;
+    var categories = new Array();
     var chart_params = eval('(' + document.getElementById("jsongraph").firstChild.nodeValue + ')');
-    
+
     var options = {
       chart: {
          renderTo: 'container',
-         plotBackgroundColor: false,
-         plotBorderWidth: false,
-         plotShadow: false
+         defaultSeriesType: 'line',
+         marginRight: 130,
+         marginBottom: 25
       },
       title: {
-         text: 'Collection Subjects'
+         text: 'SciELO Network Indicators'
       },
-      tooltip: {
-         formatter: function() {
-            return '<b>'+ this.point.name +'</b>: '+Math.round((this.y/chart_params.total)*100*100)/100 +' %';
+      subtitle: {
+         text: 'Source: www.scielo.org'
+      },
+      xAxis: {
+         categories: chart_params.categories
+      },
+
+    yAxis: {
+        labels: {
+            formatter: function() {
+                //return Math.pow(10,this.value);
+                this.value;
+            }
+        },
+         title: {
+            text: 'Totals'
          }
+    },
+      legend: {
+         layout: 'vertical',
+         backgroundColor: '#FFFFFF',
+         align: 'left',
+         verticalAlign: 'top',
+         x: 100,
+         y: 70,
+         floating: true,
+         shadow: true
       },
+    tooltip: {
+        formatter: function() {
+            //return '<b>'+this.x+'</b><br/>'+this.series.name+':<b>'+Math.round(Math.pow(10,this.y))+'</b>';
+            return '<b>'+this.x+'</b><br/>'+this.series.name+':<b>'+this.y+'</b>';
+        }
+    },
       plotOptions: {
-         pie: {
-            allowPointSelect: true,
-            cursor: 'pointer',
-            dataLabels: {
-               enabled: true,
-               formatter: function() {
-                  return '<b>'+ this.point.name +'</b>: '+Math.round((this.y/chart_params.total)*100*100)/100 +' %';
-               }
-
-            },
-            showInLegend: true
+         column: {
+            pointPadding: 0.2,
+            borderWidth: 0
          }
       },
-       series: [{
-         type: 'pie',
-         name: 'Browser share',
-         data: chart_params.data
-      }]
-    }
-
+      series: chart_params.series
+   }
    $(document).ready(function() {
       chart = new Highcharts.Chart(options);
    });
