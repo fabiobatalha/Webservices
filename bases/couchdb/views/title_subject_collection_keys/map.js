@@ -7,7 +7,7 @@ function(doc) {
      }
 
      for (i in doc.v441){
-        emit([doc.v441[0]["_"],doc.v980[0]["_"],doc.v100[0]["_"]], {"collection":doc.v980["0"]["_"],
+        emit([i[0]["_"],doc.v980[0]["_"],doc.v100[0]["_"]], {"collection":doc.v980["0"]["_"],
             "issn":doc.v400[0]["_"],
             "title": doc.v100[0]["_"],
             "subject": subjects,

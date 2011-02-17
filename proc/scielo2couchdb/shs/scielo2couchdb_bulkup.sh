@@ -22,7 +22,7 @@ do
     
     while [ $i -le $total ]
     do
-#       $python26_path ../lib/isis2couchdb/tools/isis2json.py $ISOFILE -cf -q $bulk_size -s $i -u -t v $y | curl -d @- -H "Content-Type: application/json" -X POST $couchdb_database/_bulk_docs
+       $python26_path ../lib/isis2couchdb/tools/isis2json.py $ISOFILE -cf -q $bulk_size -s $i -u -t v $y | curl -d @- -H "Content-Type: application/json" -X POST $couchdb_database/_bulk_docs
 
         if [ $(($i + $bulk_size)) -ge $total ]
         then
