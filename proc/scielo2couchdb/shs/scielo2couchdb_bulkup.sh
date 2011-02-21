@@ -38,3 +38,4 @@ do
     y=""
     i=0
 done
+cat ../../input/network/network.json | curl -d @- -H "Content-Type: application/json" -X POST $couchdb_database/_bulk_docs
