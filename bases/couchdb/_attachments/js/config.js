@@ -1,6 +1,4 @@
-config = {"lang": "en"
-
-}
+config = {"lang": "en"}
 
 
 if (! req.query.lang){

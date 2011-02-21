@@ -3,11 +3,11 @@ function(doc) {
      subjects = new Array();
 
      for (i in doc.v441){
-         subjects.push(doc.v440[i]["_"]);
+         subjects.push(doc.v441[i]["_"]);
      }
 
      for (i in doc.v441){
-        emit([i[0]["_"],doc.v980[0]["_"],doc.v100[0]["_"]], {"collection":doc.v980["0"]["_"],
+        emit([doc.v441[i]["_"],doc.v980[0]["_"],doc.v100[0]["_"]], {"collection":doc.v980["0"]["_"],
             "issn":doc.v400[0]["_"],
             "title": doc.v100[0]["_"],
             "subject": subjects,

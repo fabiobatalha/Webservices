@@ -129,3 +129,13 @@ regtype_list = {"i":{"en":"issues","es":"periódicos","pt":"fascículos"},
                 "h":{"en":"article","es":"artículo","pt":"artigo"},
                 "t":{"en":"title","es":"periodico","pt":"título"}
                }
+
+subjects_list = { "Agricultural Sciences":{"pt":"Ciências Agrárias","es":"Ciencias Agricolas","en":"Agricultural Sciences"},
+          "Applied Social Sciences":{"pt":"Ciências Sociais Aplicadas","es":"Ciencias Sociales Aplicadas","en":"Applied Social Science"},
+          "Biological Sciences":{"pt":"Ciências Biológicas","es":"Ciencias Biológicas","en":"Biological Sciences"},
+          "Engineering":{"pt":"Engenharias","es":"Ingenierias","en":"Engineering"},
+          "Exact and Earth Sciences":{"pt":"Ciencias Exatas e da Terra","es":"Ciencias Exactas y de la Tierra","en":"Exact and Earth Sciences"},
+          "Health Sciences":{"pt":"Ciências da Saúde","es":"Ciencias de la Salud","en":"Health Sciences"},
+          "Human Sciences":{"pt":"Ciências Humanas","es":"Humanidades","en":"Humanities"},
+          "Linguistics, Letters and Arts":{"pt":"Ligüistica, Lettras e Artes","es":"Linguistica, Letras y Artes","en":"Linguistics, Letters and Arts"}
+}

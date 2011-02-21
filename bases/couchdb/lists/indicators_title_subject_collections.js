@@ -1,5 +1,6 @@
 function(head, req) {
     // !json templates.indicators_title_subject_collections
+    // !code _attachments/js/config.js
     // !code _attachments/js/collections_list.js
 
     var chart1; // globally available
@@ -45,7 +46,7 @@ function(head, req) {
        data.push(Array(i,series[i]));
     }
 
-    var chart_params =  { data: data, total: total};
+    var chart_params =  {data: data, total: total};
 
     var myJSONText = JSON.stringify(chart_params);
 
