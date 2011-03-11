@@ -10,7 +10,7 @@
 # by the Free Software Foundation, either version 2.1 of the License, or
 # (at your option) any later version.
 
-# This program is distributed in the hope that it will be useful, 
+# This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Lesser General Public License for more details.
@@ -41,7 +41,7 @@ ISIS_ACTIVE_KEY = 'active'
 SUBFIELD_DELIMITER = '^'
 INPUT_ENCODING = 'cp1252'
 
-def iterMstRecords(master_file_name, subfields):
+def iterMstRecords(master_file_name, isis_json_type):
     try:
         from br.bireme.zeus.master import MasterFactory, Record
     except ImportError:
@@ -59,7 +59,7 @@ def iterMstRecords(master_file_name, subfields):
         for field in record.getFields():
             field_key = str(field.getId())
             field_occurrences = fields.setdefault(field_key,[])
-            if subfields:
+            if isis_json_type == 3:
                 content = {}
                 for subfield in field.getSubfields():
                     subfield_key = subfield.getId()
@@ -69,7 +69,7 @@ def iterMstRecords(master_file_name, subfields):
                         subfield_occurrences = content.setdefault(subfield_key,[])
                         subfield_occurrences.append(subfield.getContent())
                 field_occurrences.append(content)
-            else:
+            elif isis_json_type == 1:
                 content = []
                 for subfield in field.getSubfields():
                     subfield_key = subfield.getId()
@@ -79,22 +79,14 @@ def iterMstRecords(master_file_name, subfields):
                         content.append(SUBFIELD_DELIMITER+subfield_key+
                                        subfield.getContent())
                 field_occurrences.append(''.join(content))
+            else:
+                raise NotImplementedError('ISIS-JSON type %s conversion not yet implemented for .mst input' % isis_json_type)
         yield fields
     mst.close()
 
-def iterIsoRecords(iso_file_name, subfields):
+def iterIsoRecords(iso_file_name, isis_json_type):
     from iso2709 import IsoFile
-    def parse(field):
-        content = field.value.decode(INPUT_ENCODING,'replace')
-        parts = content.split(SUBFIELD_DELIMITER)
-        subs = {}
-        main = parts.pop(0)
-        if len(main) > 0:
-            subs['_'] = main
-        for part in parts:
-            prefix = part[0]
-            subs[prefix] = part[1:]
-        return subs
+    from subfield import expand
 
     iso = IsoFile(iso_file_name)
     for record in iso:
@@ -102,16 +94,21 @@ def iterIsoRecords(iso_file_name, subfields):
         for field in record.directory:
             field_key = str(int(field.tag)) # remove leading zeroes
             field_occurrences = fields.setdefault(field_key,[])
-            if subfields:
-                field_occurrences.append(parse(field))
+            content = field.value.decode(INPUT_ENCODING,'replace')
+            if isis_json_type == 1:
+                field_occurrences.append(content)
+            elif isis_json_type == 2:
+                field_occurrences.append(expand(content))
+            elif isis_json_type == 3:
+                field_occurrences.append(dict(expand(content)))
             else:
-                field_occurrences.append(field.value.decode(INPUT_ENCODING,'replace'))
+                raise NotImplementedError('ISIS-JSON type %s conversion not yet implemented for .iso input' % isis_json_type)
 
         yield fields
     iso.close()
 
 def writeJsonArray(iterRecords, file_name, output, qty, skip, id_tag,
-                   gen_uuid, mongo, mfn, subfields, tagprefix, regtype):
+                   gen_uuid, mongo, mfn, isis_json_type, prefix, constant):
     start = skip
     end = start + qty
     if not mongo:
@@ -121,7 +118,7 @@ def writeJsonArray(iterRecords, file_name, output, qty, skip, id_tag,
         ids = set()
     else:
         id_tag = ''
-    for i, record in enumerate(iterRecords(file_name, subfields)):
+    for i, record in enumerate(iterRecords(file_name, isis_json_type)):
         if i >= end:
             break
         if i > start and not mongo:
@@ -140,11 +137,13 @@ def writeJsonArray(iterRecords, file_name, output, qty, skip, id_tag,
                     if ISIS_MFN_KEY in record:
                         msg = msg + (' (mfn=%s)' % record[ISIS_MFN_KEY])
                     raise TypeError(msg % (id_tag, i))
-                else:
-                    if subfields:
-                        id = occurrences[0]['_']
-                    else:
+                else: # ok, we have one and only one id field
+                    if isis_json_type == 1:
                         id = occurrences[0]
+                    elif isis_json_type == 2:
+                        id = occurrences[0][0][1]
+                    elif isis_json_type == 3:
+                        id = occurrences[0]['_']
                     if id in ids:
                         msg = 'duplicate id %s in tag #%s, record %s'
                         if ISIS_MFN_KEY in record:
@@ -156,13 +155,14 @@ def writeJsonArray(iterRecords, file_name, output, qty, skip, id_tag,
                 record['_id'] = unicode(uuid4())
             elif mfn:
                 record['_id'] = record[ISIS_MFN_KEY]
-            if tagprefix:
+            if prefix:
                 for tag in record:
                     if str(tag).isdigit():
-                        record[tagprefix+tag] = record[tag]
+                        record[prefix+tag] = record[tag]
                         del record[tag]
-            if regtype:              
-                record[regtype.split(':')[0]] = regtype.split(':')[1]
+            if constant:
+                constant_key, constant_value = constant.split(':')
+                record[constant_key] = constant_value
             output.write(json.dumps(record).encode('utf-8'))
     if not mongo:
         output.write('\n]')
@@ -191,9 +191,8 @@ if __name__ == '__main__':
         help='output individual records as separate JSON dictionaries,'
              ' one per line for bulk insert to MongoDB via mongoimport utility')
     parser.add_argument(
-        '-f', '--subfields', action='store_true',
-        help='explode each field into a JSON dictionary, with "_" as'
-             ' default key, and subfield markers as additional keys')
+        '-t', '--type', type=int, metavar='ISIS_JSON_TYPE', default=1,
+        help='ISIS-JSON type, sets field structure: 1=string, 2=alist, 3=dict')
     parser.add_argument(
         '-q', '--qty', type=int, default=DEFAULT_QTY,
         help='maximum quantity of records to read (default=ALL)')
@@ -208,26 +207,26 @@ if __name__ == '__main__':
         '-u', '--uuid', action='store_true',
         help='generate an "_id" with a random UUID for each record')
     parser.add_argument(
-        '-t', '--tagprefix', type=str, metavar='PREFIX', default='',
-        help='concatenate prefix to numeric field tags (ex. 99 becomes "v99"')
+        '-p', '--prefix', type=str, metavar='PREFIX', default='',
+        help='concatenate prefix to every numeric field tag (ex. 99 becomes "v99")')
     parser.add_argument(
         '-n', '--mfn', action='store_true',
         help='generate an "_id" from the MFN of each record'
              ' (available only for .mst input)')
     parser.add_argument(
-        '-y', '--regtype', type=str, default='',
-        help='Include a field key:value for each register: -y key:value')
+        '-k', '--constant', type=str, metavar='TAG:VALUE', default='',
+        help='Include a constant tag:value in every record (ex. -k type:AS)')
 
     '''
     # TODO: implement this to export large quantities of records to CouchDB
-    parser.add_argument( 
+    parser.add_argument(
         '-r', '--repeat', type=int, default=1,
         help='repeat operation, saving multiple JSON files'
              ' (default=1, use -r 0 to repeat until end of input)')
     '''
     # parse the command line
     args = parser.parse_args()
-    if args.file_name.endswith('.mst'):
+    if args.file_name.lower().endswith('.mst'):
         iterRecords = iterMstRecords
     else:
         if args.mfn:
@@ -237,7 +236,7 @@ if __name__ == '__main__':
     if args.couch:
         args.out.write('{ "docs" : ')
     writeJsonArray(iterRecords, args.file_name, args.out, args.qty, args.skip,
-        args.id, args.uuid, args.mongo, args.mfn, args.subfields, args.tagprefix, args.regtype)
+        args.id, args.uuid, args.mongo, args.mfn, args.type, args.prefix, args.constant)
     if args.couch:
         args.out.write('}\n')
     args.out.close()

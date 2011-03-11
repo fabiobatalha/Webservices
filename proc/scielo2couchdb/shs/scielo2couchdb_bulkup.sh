@@ -14,15 +14,15 @@ do
     
     if [ $databases == "bib4cit.iso" ]
     then
-        y="-y v706:c"
+        k="-k v706:c"
     elif [ $databases == "title.iso" ]
     then
-        y="-y v706:t"
+        k="-k v706:t"
     fi
     
     while [ $i -le $total ]
     do
-       $python26_path ../lib/isis2couchdb/tools/isis2json.py $ISOFILE -cf -q $bulk_size -s $i -u -t v $y | curl -d @- -H "Content-Type: application/json" -X POST $couchdb_database/_bulk_docs
+       $python26_path ../lib/isis2couchdb/tools/isis2json.py $ISOFILE -cf -q $bulk_size -s $i -u -t v $k | curl -d @- -H "Content-Type: application/json" -X POST $couchdb_database/_bulk_docs
 
         if [ $(($i + $bulk_size)) -ge $total ]
         then
