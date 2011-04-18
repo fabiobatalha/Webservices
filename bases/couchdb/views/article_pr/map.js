@@ -15,7 +15,7 @@ function(doc) {
                                                 "vol_suppl":doc.v131,
                                                 "num_suppl":doc.v132,
                                                 "url": "http://"+collections_list[doc.v980[0]["_"]].domain+
-          "/scielo.php?script=sci_arttext&pid="+doc.v880[0]["_"]+"&lng=en&nrm=iso"
+          "/scielo.php?script=sci_arttext_pr&pid="+doc.v880[0]["_"]+"&lng=en&nrm=iso"
                                         });
   }
 }
