@@ -123,12 +123,12 @@ collections_list = {"scl": {"acron":"scl",
                             "name":{"pt":"Revista Virtual de Química","es":"Revista Virtual de Química","en":"Revista Virtual de Química"},
                             "status":"diffusion"
                             }
-}
+};
 
 regtype_list = {"i":{"en":"issues","es":"periódicos","pt":"fascículos"},
                 "h":{"en":"article","es":"artículo","pt":"artigo"},
                 "t":{"en":"title","es":"periodico","pt":"título"}
-               }
+               };
 
 subjects_list = { "Agricultural Sciences":{"pt":"Ciências Agrárias","es":"Ciencias Agricolas","en":"Agricultural Sciences"},
           "Applied Social Sciences":{"pt":"Ciências Sociais Aplicadas","es":"Ciencias Sociales Aplicadas","en":"Applied Social Science"},
@@ -138,4 +138,4 @@ subjects_list = { "Agricultural Sciences":{"pt":"Ciências Agrárias","es":"Cien
           "Health Sciences":{"pt":"Ciências da Saúde","es":"Ciencias de la Salud","en":"Health Sciences"},
           "Human Sciences":{"pt":"Ciências Humanas","es":"Humanidades","en":"Humanities"},
           "Linguistics, Letters and Arts":{"pt":"Ligüistica, Lettras e Artes","es":"Linguistica, Letras y Artes","en":"Linguistics, Letters and Arts"}
-}
+};
