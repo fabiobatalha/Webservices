@@ -14,6 +14,7 @@ function(doc) {
                                                 "num":doc.v32,
                                                 "vol_suppl":doc.v131,
                                                 "num_suppl":doc.v132,
+                                                "original_language":doc.v40,                                                
                                                 "url": "http://"+collections_list[doc.v980[0]["_"]].domain+
           "/scielo.php?script=sci_arttext_pr&pid="+doc.v880[0]["_"]+"&lng=en&nrm=iso"
                                         });

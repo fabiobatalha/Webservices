@@ -1,7 +1,8 @@
 function(doc) {
 
   if (doc.v706[0]["_"] == 'h'){
-     emit(doc.v65[0]["_"],{"collection":doc.v980[0]["_"],
+      if (doc.v12){
+         emit(doc.v65[0]["_"],{"collection":doc.v980[0]["_"],
                                                 "pid":doc.v880[0]["_"],
                                                 "article_title":doc.v12,
                                                 "pubdate":doc.v65,
@@ -14,8 +15,10 @@ function(doc) {
                                                 "num":doc.v32,
                                                 "vol_suppl":doc.v131,
                                                 "num_suppl":doc.v132,
+                                                "original_language":doc.v40,                                                
                                                 "url": "http://"+collections_list[doc.v980[0]["_"]].domain+
                                                   "/scielo.php?script=sci_arttext&pid="+doc.v880[0]["_"]+"&lng=en&nrm=iso"
                                                 });
+      }
   }
 }
