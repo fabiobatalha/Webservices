@@ -1,14 +1,17 @@
 . scielo2couchdb_config.sh
 
 echo "[CLEANING ENVIRONMENT]"
-echo  "rm -f ../output/iso/*"
-rm -f ../output/iso/*
+
+echo  "rm -rf ../output/iso/*"
+rm -rf ../output/iso/*
 
 echo "[DELETING DATABASE $couchdb_database]"
+
 echo "curl -X DELETE $couchdb_database"
 curl -X DELETE $couchdb_database
 
 echo "[CREATING EMPTY DATABASE $couchdb_database]"
+
 echo "curl -X PUT $couchdb_database"
 curl -X PUT $couchdb_database
 
@@ -20,3 +23,8 @@ echo "[RUNING JOIN DATABASES]"
 
 echo "[RUNNING BULKUP]"
 ./scielo2couchdb_bulkup.sh
+
+echo "[CLEANING ENVIRONMENT]"
+
+echo  "rm -rf ../output/iso/*"
+rm -rf ../output/iso/*
