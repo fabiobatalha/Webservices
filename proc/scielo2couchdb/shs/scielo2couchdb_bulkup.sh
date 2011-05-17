@@ -1,14 +1,12 @@
-#!/bin/sh
-
 . scielo2couchdb_config.sh
 
 i=0
 
-for databases in `ls -1 $database_dir"output/iso/"`
+for databases in `ls -1 ../output/`
 do
-    ISOFILE=$database_dir/output/iso/$databases
+    ISOFILE="../output/"$databases
     echo "Counting registers in "$databases
-    total=`$cisis_dir/mx iso=$database_dir/output/iso/$databases pft=mfn/ now | wc -l`
+    total=`$cisis_dir/mx iso=../output/$databases pft=mfn/ now | wc -l`
 
     echo "Bulking $total registers - Be calm, this process could take a while!"
 
