@@ -3,3 +3,5 @@
 *.iso
 *.pyc
 nbproject/
+input
+output
