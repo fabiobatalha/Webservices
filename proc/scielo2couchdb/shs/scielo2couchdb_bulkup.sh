@@ -10,17 +10,9 @@ do
 
     echo "Bulking $total registers - Be calm, this process could take a while!"
 
-    if [ $databases == "bib4cit.iso" ]
-    then
-        k="-k v706:c"
-    elif [ $databases == "title.iso" ]
-    then
-        k="-k v706:t"
-    fi
-
     while [ $i -le $total ]
     do
-        $python26_path ../lib/isis2couchdb/tools/isis2json.py $ISOFILE -c -q $bulk_size -s $i -p v -t 3 $k | curl -d @- -H "Content-Type: application/json" -X POST $couchdb_database/_bulk_docs
+        $python26_path ../lib/isis2couchdb/tools/isis2json.py $ISOFILE -c -q $bulk_size -s $i -p v -t 3 | curl -d @- -H "Content-Type: application/json" -X POST $couchdb_database/_bulk_docs
         if [ $(($i + $bulk_size)) -ge $total ]
         then
             tmp=$(($i - $bulk_size))
@@ -35,4 +27,11 @@ do
     y=""
     i=0
 done
+
+echo "---+--- PUTTING NETWORK JSON TO THE COUCHDB DATABASE"
 cat ../input/network/network.json | curl -d @- -H "Content-Type: application/json" -X POST $couchdb_database/_bulk_docs
+
+echo "---+--- PUSHING COUCHAPP TO THE COUCHDB DATABASE"
+cd $database_dir/couchdb
+couchapp push $couchdb_database 
+cd -
