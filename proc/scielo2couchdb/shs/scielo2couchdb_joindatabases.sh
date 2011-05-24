@@ -47,7 +47,7 @@ do
      
         if [ -f $file_iso ]
         then
-            echo $cisis_dir/mx iso=$file_iso $proc $procb append=../output/${file/.iso} -all now
+            echo "---+---" $cisis_dir/mx iso=$file_iso $proc $procb append=../output/${file/.iso} -all now
             $cisis_dir/mx iso=$file_iso $proc $procb append=../output/${file/.iso} -all now
         else
             echo "---+--- [ERROR] FILE DOESN'T EXISTS: "$file_iso
