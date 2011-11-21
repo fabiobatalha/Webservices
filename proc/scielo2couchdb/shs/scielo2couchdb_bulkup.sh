@@ -32,6 +32,6 @@ echo "---+--- PUTTING NETWORK JSON TO THE COUCHDB DATABASE"
 cat ../input/network/network.json | curl -d @- -H "Content-Type: application/json" -X POST $couchdb_database/_bulk_docs
 
 echo "---+--- PUSHING COUCHAPP TO THE COUCHDB DATABASE"
-cd $database_dir/couchdb
-couchapp push $couchdb_database 
+cd ../../../bases/couchdb/
+couchapp push $couchdb_url$couchdb_database
 cd -

@@ -1,7 +1,7 @@
 . scielo2couchdb_config.sh
 
 echo "[ACTIVATING VIRTUAL ENVIRONMENT]"
-source ../../../scielo_webservices-env/bin/activate
+source ../../../webservices-env/bin/activate
 
 echo "[CLEANING ENVIRONMENT]"
 
@@ -31,6 +31,9 @@ echo "[CLEANING ENVIRONMENT]"
 
 echo  "rm -rf ../output/iso/*"
 rm -rf ../output/iso/*
+
+echo "[COMPACTING DATABASE]"
+./scielo2couchdb_compact.sh
 
 echo "[DEACTIVATING VIRTUAL ENVIRONMENT]"
 deactivate
