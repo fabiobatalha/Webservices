@@ -1,1 +1,30 @@
 Webservices from SciELO ORG databases
+
+Installation:
+
+== Easy_install:
+
+wget http://peak.telecommunity.com/dist/ez_setup.py
+
+python ez_setup.py
+
+== Install virtualenv:
+
+easy_install virtualenv
+
+== Create a virtual enviroment:
+
+virtualenv --distribute --no-site-packages webservices-env
+
+== Activing the env: 
+
+source webservices-env/bin/activate
+
+Now the easy_install the packages only in this env
+
+easy_install couchdb
+
+easy_install uuid (isis2couch)
+
+easy_install couchapp
+
