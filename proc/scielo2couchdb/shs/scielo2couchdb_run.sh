@@ -35,5 +35,8 @@ rm -rf ../output/iso/*
 echo "[COMPACTING DATABASE]"
 ./scielo2couchdb_compact.sh
 
+echo "[INDEX VIEWS]"
+./scielo2couchdb_index_views.sh
+
 echo "[DEACTIVATING VIRTUAL ENVIRONMENT]"
 deactivate
