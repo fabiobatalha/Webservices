@@ -12,7 +12,7 @@ do
 
     while [ $i -le $total ]
     do
-        python ../lib/isis2couchdb/tools/isis2json.py $ISOFILE -c -q $bulk_size -s $i -p v -t 3 | curl -d @- -H "Content-Type: application/json" -X POST $couchdb_database/_bulk_docs
+        python ../lib/isis2couchdb/tools/isis2json.py $ISOFILE -c -q $bulk_size -s $i -p v -t 3 | curl -d @- -H "Content-Type: application/json" -X POST $couchdb_url$couchdb_database/_bulk_docs
         if [ $(($i + $bulk_size)) -ge $total ]
         then
             tmp=$(($i - $bulk_size))
@@ -29,7 +29,7 @@ do
 done
 
 echo "---+--- PUTTING NETWORK JSON TO THE COUCHDB DATABASE"
-cat ../input/network/network.json | curl -d @- -H "Content-Type: application/json" -X POST $couchdb_database/_bulk_docs
+cat ../input/network/network.json | curl -d @- -H "Content-Type: application/json" -X POST $couchdb_url$couchdb_database/_bulk_docs
 
 echo "---+--- PUSHING COUCHAPP TO THE COUCHDB DATABASE"
 cd ../../../bases/couchdb/
