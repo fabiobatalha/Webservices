@@ -1,5 +1,7 @@
-database_dir="/var/www/webservices/bases/"
+database_dir="<PATH>/proc/scielo2couchdb/"
 cisis_dir="/usr/local/bireme/cisis/5.5.pre02/linux/lindG4"
-couchdb_database="http://localhost:5984/scieloorg"
+couchdb_url="<URL>"
+couchdb_database="scieloorg"
 bulk_size="10000"
-python26_path=/usr/bin/python2.6
+reply=true
+target="<PATH>"

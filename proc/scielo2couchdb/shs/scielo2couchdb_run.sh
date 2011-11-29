@@ -8,15 +8,15 @@ echo "[CLEANING ENVIRONMENT]"
 echo  "rm -rf ../output/iso/*"
 rm -rf ../output/iso/*
 
-echo "[DELETING DATABASE $couchdb_database]"
+echo "[DELETING DATABASE $couchdb_url$couchdb_database]"
 
-echo "curl -X DELETE $couchdb_database"
-curl -X DELETE $couchdb_database
+echo "curl -X DELETE $couchdb_url$couchdb_database"
+curl -X DELETE $couchdb_url$couchdb_database
 
-echo "[CREATING EMPTY DATABASE $couchdb_database]"
+echo "[CREATING EMPTY DATABASE $couchdb_url$couchdb_database]"
 
-echo "curl -X PUT $couchdb_database"
-curl -X PUT $couchdb_database
+echo "curl -X PUT $couchdb_url$couchdb_database"
+curl -X PUT $couchdb_url$couchdb_database
 
 echo "[RUNNIUNG INDEX DATABASES]"
 ./scielo2couchdb_index.sh
@@ -34,6 +34,13 @@ rm -rf ../output/iso/*
 
 echo "[COMPACTING DATABASE]"
 ./scielo2couchdb_compact.sh
+
+#VERIFY IF REPLY
+if [ $reply == "true" ]
+  then
+    echo "[REPLICATE DATABASE]"
+    ./scielo2couchdb_reply.sh
+fi
 
 echo "[INDEX VIEWS]"
 ./scielo2couchdb_index_views.sh
