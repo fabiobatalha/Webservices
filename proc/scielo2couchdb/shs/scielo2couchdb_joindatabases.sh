@@ -35,9 +35,9 @@ do
         then
             echo "---+--- title.iso from "$collection
             proc="proc='a706#t#a980#$collection#'" 
-        elif [ $file == "issues.iso" ]
+        elif [ $file == "issue.iso" ]
         then
-            echo "---+--- issues.iso from "$collection
+            echo "---+--- issue.iso from "$collection
             proc="proc='a980#$collection#'"
         elif [ $file == "bib4cit.iso" ]
         then
