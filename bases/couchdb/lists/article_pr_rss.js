@@ -19,7 +19,7 @@ function(head, req) {
         row.value["collection_info"] = collections_list[row.value["collection"]];
         row.value["article_url"] = "http://"+collections_list[row.value.collection].domain+
             "/scielo.php?script=sci_arttext_pr&pid="+row.value.pid+"&lng="+
-            req.query.lang+"&nrm=iso&tlng=en" ;
+            req.query.lang+"&nrm=iso&tlng="+req.query.lang;
 
         // Choosing the title language according to the paramenter lang
         for (i in row.value.article_title){
